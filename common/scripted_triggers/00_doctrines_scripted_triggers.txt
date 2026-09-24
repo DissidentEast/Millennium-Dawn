@@ -104,6 +104,7 @@ has_selected_land_equipment_grand_doctrine = {
 		has_doctrine = mobile_equipment
 		has_doctrine = fires_equipment
 		has_doctrine = full_equipment
+		has_doctrine = spearhead_operations
 	}
 }
 
@@ -123,6 +124,8 @@ has_selected_air_grand_doctrine = {
 		has_doctrine = air_battlefield_support
 		has_doctrine = air_supremacy
 		has_doctrine = mixed_role_air_force
+		has_doctrine = autonomous_air_operations
+		has_doctrine = integrated_air_warfare
 	}
 }
 

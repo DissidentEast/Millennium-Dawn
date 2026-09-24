@@ -554,7 +554,7 @@ mixed_mechanized_equipment = {
 			category_apc = {
 				experience_loss_factor = -0.1
 			}
-			category_ifv = {
+			category_IFV = {
 				experience_loss_factor = -0.1
 			}
 		}
@@ -673,7 +673,7 @@ apc_mechanized_equipment = {
 			}
 		}
 		enhanced_communications_equipment = {
-			category_APC = {
+			category_apc = {
 				max_organisation = 1
 			}
 		}
@@ -1452,7 +1452,7 @@ drone_equipment = {
 
 	rewards = {
 		ew_resilient_link_discipline = {
-			Drone_tactical_company = {
+			drone_tactical_company = {
 				battalion_mult = {
 					category = category_front_line
 					max_organisation = 0.02
@@ -1466,7 +1466,7 @@ drone_equipment = {
 			}
 		}
 		sensor_to_shooter = {
-			Drone_tactical_company = {
+			drone_tactical_company = {
 				battalion_mult = {
 					category = category_front_line
 					ap_attack = 0.02
@@ -1480,7 +1480,7 @@ drone_equipment = {
 			}
 		}
 		swarm_deconfliction = {
-			Drone_tactical_company = {
+			drone_tactical_company = {
 				battalion_mult = {
 					category = category_front_line
 					soft_attack = 0.02
@@ -1502,7 +1502,7 @@ drone_equipment = {
 			}
 		}
 		rapid_turnaround_ground_crew = {
-			Drone_tactical_company = {
+			drone_tactical_company = {
 				battalion_mult = {
 					category = category_front_line
 					default_morale = 0.01

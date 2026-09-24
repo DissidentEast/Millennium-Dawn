@@ -5,14 +5,12 @@ local_airspace_defense = {
 	description = GRAND_DOCTRINE_LOCAL_AIRSPACE_DEFENCE_DESC
 	icon = GFX_doctrine_local_airspace_defense
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -22,10 +20,6 @@ local_airspace_defense = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			add = 12
 			is_in_faction_with = USA
@@ -108,14 +102,12 @@ strategic_destruction = {
 	description = GRAND_DOCTRINE_STRATEGIC_DESTRUCTION_DESC
 	icon = GFX_doctrine_strategic_destruction
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -125,10 +117,6 @@ strategic_destruction = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			factor = 0
 			NOT = { num_of_military_factories > 40 }
@@ -183,7 +171,7 @@ strategic_destruction = {
 	milestones = {
 		{
 			air_strategic_bomber_bombing_factor = 0.15
-			air_strategic_bomber_night_penalty = 0.15
+			air_strategic_bomber_night_penalty = -0.15
 		}
 		{
 			category_strat_bomber = {
@@ -226,14 +214,12 @@ air_battlefield_support = {
 	description = GRAND_DOCTRINE_AIR_BATTLEFIELD_SUPPORT_DESC
 	icon = GFX_doctrine_air_battlefield_support
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -243,10 +229,6 @@ air_battlefield_support = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			add = 15
 			has_government = democratic
@@ -300,14 +282,14 @@ air_battlefield_support = {
 	milestones = {
 		{
 			air_strategic_bomber_bombing_factor = 0.15
-			air_strategic_bomber_night_penalty = 0.15
+			air_strategic_bomber_night_penalty = -0.15
 		}
 		{
 			air_weather_penalty = -0.15
 			air_range_factor = 0.1
 		}
 		{
-			category_CAS = {
+			category_cas = {
 				air_ground_attack = 0.15
 				air_defence = 0.1
 			}
@@ -334,14 +316,12 @@ air_supremacy = {
 	description = GRAND_DOCTRINE_AIR_SUPREMACY_DESC
 	icon = GFX_doctrine_air_supremacy
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -351,10 +331,6 @@ air_supremacy = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			factor = 0
 			NOT = { num_of_military_factories > 40 }
@@ -431,14 +407,12 @@ autonomous_air_operations = {
 	description = GRAND_DOCTRINE_AUTONOMOUS_AIR_DESC
 	icon = GFX_doctrine_drone_designs
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -448,10 +422,6 @@ autonomous_air_operations = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			factor = 0
 			NOT = { num_of_military_factories > 35 }
@@ -557,14 +527,12 @@ mixed_role_air_force = {
 	description = GRAND_DOCTRINE_MIXED_ROLE_DESC
 	icon = GFX_doctrine_mixed_role_air_force
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -574,10 +542,6 @@ mixed_role_air_force = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			add = 10
 			has_government = democratic
@@ -619,7 +583,7 @@ mixed_role_air_force = {
 		}
 		{
 			air_strategic_bomber_bombing_factor = 0.075
-			air_strategic_bomber_night_penalty = 0.075
+			air_strategic_bomber_night_penalty = -0.075
 		}
 		{
 			air_weather_penalty = -0.075
@@ -647,14 +611,12 @@ integrated_air_warfare = {
 	description = GRAND_DOCTRINE_INTEGRATED_AIR_WARFARE_DESC
 	icon = GFX_doctrine_air_superiority_fighters
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -664,10 +626,6 @@ integrated_air_warfare = {
 
 	ai_will_do = {
 		base = 1
-		modifier = {
-			factor = 0
-			NOT = { is_major_power = yes }
-		}
 		modifier = {
 			factor = 0
 			NOT = { num_of_military_factories > 40 }
@@ -728,7 +686,7 @@ integrated_air_warfare = {
 			air_interception_detect_factor = 0.1
 		}
 		{
-			category_CAS = {
+			category_cas = {
 				 air_ground_attack = 0.1
 				 air_defence = 0.05
 			 }

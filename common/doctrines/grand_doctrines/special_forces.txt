@@ -5,14 +5,12 @@ special_forces_mixed = {
 	description = SPECIAL_FORCES_MIXED_DESC
 	icon = GFX_doctrine_special_forces_mixed
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -25,17 +23,10 @@ special_forces_mixed = {
 		modifier = {
 			factor = 0
 			OR = {
-				has_selected_land_grand_doctrine = no
-				has_selected_land_equipment_grand_doctrine = no
-				has_selected_naval_grand_doctrine = no
-				has_selected_air_grand_doctrine = no
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_idea = non_power
-				has_idea = minor_power
+				NOT = { has_selected_land_grand_doctrine = yes }
+				NOT = { has_selected_land_equipment_grand_doctrine = yes }
+				NOT = { has_selected_naval_grand_doctrine = yes }
+				NOT = { has_selected_air_grand_doctrine = yes }
 			}
 		}
 	}
@@ -97,14 +88,12 @@ special_forces_marine_focus = {
 	description = SPECIAL_FORCES_MIXED_DESC
 	icon = GFX_doctrine_special_forces_mixed
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -117,17 +106,10 @@ special_forces_marine_focus = {
 		modifier = {
 			factor = 0
 			OR = {
-				has_selected_land_grand_doctrine = no
-				has_selected_land_equipment_grand_doctrine = no
-				has_selected_naval_grand_doctrine = no
-				has_selected_air_grand_doctrine = no
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_idea = non_power
-				has_idea = minor_power
+				NOT = { has_selected_land_grand_doctrine = yes }
+				NOT = { has_selected_land_equipment_grand_doctrine = yes }
+				NOT = { has_selected_naval_grand_doctrine = yes }
+				NOT = { has_selected_air_grand_doctrine = yes }
 			}
 		}
 	}
@@ -191,14 +173,12 @@ special_forces_airborne_focus = {
 	description = SPECIAL_FORCES_MIXED_DESC
 	icon = GFX_doctrine_special_forces_mixed
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -211,17 +191,10 @@ special_forces_airborne_focus = {
 		modifier = {
 			factor = 0
 			OR = {
-				has_selected_land_grand_doctrine = no
-				has_selected_land_equipment_grand_doctrine = no
-				has_selected_naval_grand_doctrine = no
-				has_selected_air_grand_doctrine = no
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_idea = non_power
-				has_idea = minor_power
+				NOT = { has_selected_land_grand_doctrine = yes }
+				NOT = { has_selected_land_equipment_grand_doctrine = yes }
+				NOT = { has_selected_naval_grand_doctrine = yes }
+				NOT = { has_selected_air_grand_doctrine = yes }
 			}
 		}
 	}
@@ -280,14 +253,12 @@ special_forces_ranger_focus = {
 	description = SPECIAL_FORCES_MIXED_DESC
 	icon = GFX_doctrine_special_forces_mixed
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -300,17 +271,10 @@ special_forces_ranger_focus = {
 		modifier = {
 			factor = 0
 			OR = {
-				has_selected_land_grand_doctrine = no
-				has_selected_land_equipment_grand_doctrine = no
-				has_selected_naval_grand_doctrine = no
-				has_selected_air_grand_doctrine = no
-			}
-		}
-		modifier = {
-			factor = 0
-			OR = {
-				has_idea = non_power
-				has_idea = minor_power
+				NOT = { has_selected_land_grand_doctrine = yes }
+				NOT = { has_selected_land_equipment_grand_doctrine = yes }
+				NOT = { has_selected_naval_grand_doctrine = yes }
+				NOT = { has_selected_air_grand_doctrine = yes }
 			}
 		}
 	}

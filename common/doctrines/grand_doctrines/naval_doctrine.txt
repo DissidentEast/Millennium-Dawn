@@ -6,14 +6,12 @@ blue_water = {
 	description = GRAND_DOCTRINE_BLUE_WATER_DESC
 	icon = GFX_doctrine_blue_water
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -135,14 +133,12 @@ green_water = {
 	description = GRAND_DOCTRINE_GREEN_WATER_DESC
 	icon = GFX_doctrine_green_water
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -236,14 +232,12 @@ jeune_ecole = {
 	description = GRAND_DOCTRINE_JEUNE_ECOLE_DESC
 	icon = GFX_doctrine_jeune_ecole
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -341,14 +335,12 @@ guerre_de_course = {
 	description = GRAND_DOCTRINE_GUERRE_DE_COURSE_DESC
 	icon = GFX_doctrine_guerre_de_course
 	available = {
-		if = {
-			limit = { original_tag = JAP }
-			OR = {
-				has_completed_focus = JAP_article_nine_transition_comittee
-				power_balance_value = {
-					id = JAP_article_nine
-					value > -0.20
-				}
+		OR = {
+			NOT = { original_tag = JAP }
+			has_completed_focus = JAP_article_nine_transition_comittee
+			power_balance_value = {
+				id = JAP_article_nine
+				value > -0.20
 			}
 		}
 	}
@@ -429,7 +421,7 @@ guerre_de_course = {
 			naval_torpedo_hit_chance_factor = 0.15
 		}
 		{
-			naval_torpedo_cooldown_factor = 0.25
+			naval_torpedo_cooldown_factor = -0.25
 			naval_torpedo_reveal_chance_factor = -0.25
 		}
 		{

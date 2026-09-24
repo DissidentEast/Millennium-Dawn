@@ -292,7 +292,7 @@ heavy_equipment = {
 			}
 		}
 		{
-			category_APC = {
+			category_apc = {
 				supply_consumption = -0.01
 				armor_value = 0.1
 			}
@@ -302,7 +302,7 @@ heavy_equipment = {
 			}
 		}
 		{
-			category_APC = {
+			category_apc = {
 				hard_attack = 0.1
 				ap_attack = 0.1
 			}
@@ -330,7 +330,7 @@ heavy_equipment = {
 			category_IFV = {
 				max_strength = 0.1
 			}
-			category_APC = {
+			category_apc = {
 				max_strength = 0.1
 			}
 		}

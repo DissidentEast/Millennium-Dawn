@@ -46,9 +46,6 @@ centralized_air_command = {
 			air_training_xp_gain_factor = 0.25
 		}
 	}
-	mastery = {
-		multiplier = 2
-	}
 }
 
 detached_air_commands = {
@@ -97,9 +94,6 @@ detached_air_commands = {
 		local_legends = {
 			air_ace_generation_chance_factor = 0.25
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 #For those who really, really, *really* want to try and do carrier air wings
@@ -156,9 +150,6 @@ naval_air_command = {
 		port_strike_missions = {
 			port_strike = 0.3
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 #Aircraft Design
@@ -300,9 +291,6 @@ multirole_aircraft_designs = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 dedicated_aircraft_designs = {
@@ -443,9 +431,6 @@ dedicated_aircraft_designs = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 heavy_aircraft_designs = {
@@ -525,9 +510,6 @@ heavy_aircraft_designs = {
 				add_ideas = heavy_aircraft_design_hidden_spirit
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -636,9 +618,6 @@ drone_designs = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 stealth_aircraft_designs = {
 	track = aircraft_design
@@ -735,9 +714,6 @@ stealth_aircraft_designs = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 electronic_warfare_designs = {
@@ -810,9 +786,6 @@ electronic_warfare_designs = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 modular_airframe_designs = {
@@ -864,9 +837,6 @@ modular_airframe_designs = {
 			air_mission_efficiency = 0.05
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 #Heavy Aircraft
@@ -911,9 +881,6 @@ strategic_bomber_command = {
 				air_defence = 0.1
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -962,9 +929,6 @@ naval_bombers = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 heavy_gunships = {
@@ -1010,9 +974,6 @@ heavy_gunships = {
 				air_agility = 0.15
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 airborne_early_warning = {
@@ -1067,9 +1028,6 @@ airborne_early_warning = {
 		ground_surveillance_integration = {
 			ground_attack_factor = 0.05
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1128,9 +1086,6 @@ strategic_airlift = {
 			repair_speed_air_base_factor = 0.25
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 aerial_refueling_operations = {
@@ -1183,9 +1138,6 @@ aerial_refueling_operations = {
 		surge_tanker_ops = {
 			air_mission_efficiency = 0.05
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1242,9 +1194,6 @@ mixed_multirole_aircraft = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 strike_multirole_aircraft = {
@@ -1298,9 +1247,6 @@ strike_multirole_aircraft = {
 				air_defence = 0.1
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1384,9 +1330,6 @@ multirole_air_operations = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 air_dominance_multirole = {
@@ -1447,9 +1390,6 @@ air_dominance_multirole = {
 			}
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 carrier_multirole_operations = {
@@ -1506,9 +1446,6 @@ carrier_multirole_operations = {
 			air_night_penalty = -0.05
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 #CAS / NAVAL
@@ -1530,7 +1467,7 @@ cas_aircraft_operations = {
 	}
 
 	# EFFECTS
-	category_CAS = {
+	category_cas = {
 		air_ground_attack = 0.1
 	}
 
@@ -1539,18 +1476,18 @@ cas_aircraft_operations = {
 			tech_air_damage_factor = -0.10
 		}
 		weapons_school = {
-			category_CAS = {
+			category_cas = {
 				air_ground_attack = 0.05
 				air_bombing = 0.1
 			}
 		}
 		improved_aircraft_systems = {
-			category_CAS = {
+			category_cas = {
 				air_agility = 0.1
 			}
 		}
 		expanded_combat_tactics = {
-			category_CAS = {
+			category_cas = {
 				air_attack = 0.025
 				air_defence = 0.05
 			}
@@ -1560,9 +1497,6 @@ cas_aircraft_operations = {
 			 air_defence_factor = 0.02
 			 air_agility_factor = 0.02
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1613,9 +1547,6 @@ naval_strike_operations = {
 				surface_detection = 0.1
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1670,9 +1601,6 @@ munitions_and_support = {
 			air_bombing_targetting = 0.05
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 sead_dead_operations = {
@@ -1714,7 +1642,7 @@ sead_dead_operations = {
 			tech_air_damage_factor = -0.05
 		}
 		radar_hunting_doctrine = {
-			category_CAS = {
+			category_cas = {
 				air_defence = 0.05
 			}
 			category_Strike_fighter = {
@@ -1733,9 +1661,6 @@ sead_dead_operations = {
 		integrated_threat_suppression = {
 			enemy_army_bonus_air_superiority_factor = -0.05
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1801,9 +1726,6 @@ deep_interdiction_doctrine = {
 			air_mission_efficiency = 0.05
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 air_interdiction_campaign = {
@@ -1842,7 +1764,7 @@ air_interdiction_campaign = {
 			air_close_air_support_org_damage_factor = 0.05
 		}
 		loiter_strike_profiles = {
-			category_CAS = {
+			category_cas = {
 				air_range = 0.10
 			}
 		}
@@ -1851,7 +1773,7 @@ air_interdiction_campaign = {
 			air_cas_efficiency = 0.1
 		}
 		target_rich_environment = {
-			category_CAS = {
+			category_cas = {
 				air_ground_attack = 0.1
 			}
 		}
@@ -1859,9 +1781,6 @@ air_interdiction_campaign = {
 			air_mission_efficiency = 0.05
 			air_fuel_consumption_factor = -0.05
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -1929,9 +1848,6 @@ light_fighters = {
 			 }
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 air_superiority_fighters = {
@@ -1997,9 +1913,6 @@ air_superiority_fighters = {
 			air_escort_efficiency = 0.15
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 bvr_combat_doctrine = {
@@ -2064,9 +1977,6 @@ bvr_combat_doctrine = {
 			air_mission_xp_gain_factor = 0.10
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 wvr_dogfighting_doctrine = {
@@ -2126,9 +2036,6 @@ wvr_dogfighting_doctrine = {
 		instinctive_fighter_tactics = {
 			air_wing_xp_loss_when_killed_factor = -0.15
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -2192,9 +2099,6 @@ stealth_fighter_doctrine = {
 				air_defence = 0.05
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
 	}
 }
 
@@ -2260,9 +2164,6 @@ dedicated_interceptor_doctrine = {
 			enemy_army_bonus_air_superiority_factor = -0.075
 		}
 	}
-	mastery = {
-		multiplier = 6
-	}
 }
 
 #Drone Warfare
@@ -2327,10 +2228,6 @@ male_ucav_operations = {
 				}
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
-
 	}
 }
 
@@ -2402,10 +2299,6 @@ ucas_carrier_strike = {
 			port_strike = 0.10
 		}
 	}
-	mastery = {
-		multiplier = 6
-
-	}
 }
 
 loitering_munitions_doctrine = {
@@ -2468,10 +2361,6 @@ loitering_munitions_doctrine = {
 			air_bombing_targetting = 0.10
 		}
 	}
-	mastery = {
-		multiplier = 6
-
-	}
 }
 
 counter_drone_operations = {
@@ -2524,10 +2413,6 @@ counter_drone_operations = {
 			air_home_defence_factor = 0.10
 			industry_air_damage_factor = -0.10
 		}
-	}
-	mastery = {
-		multiplier = 6
-
 	}
 }
 
@@ -2615,9 +2500,5 @@ drone_swarm_integration = {
 				add_ideas = drone_swarm_hidden_spirit
 			}
 		}
-	}
-	mastery = {
-		multiplier = 6
-
 	}
 }

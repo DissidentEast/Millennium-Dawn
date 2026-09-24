@@ -95,7 +95,7 @@ dedicated_deep_battle = {
 	enable_tactic = tactic_deep_battle_push
 	 enable_tactic = tactic_deep_battle_assault
 	 enable_tactic = tactic_deep_battle_encirclement
-	 enable_tactic = tactic_breakthrough
+	 enable_tactic = tactic_deep_battle_breakthrough
 
 	 no_supply_grace = 45
 	 org_loss_when_moving = -0.05
