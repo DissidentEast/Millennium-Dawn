@@ -10,7 +10,7 @@ CI and pre-push run the collection-layout guard by explicit path with config `ad
 
 ## When the Test Suite runs
 
-`test-suite.yml` triggers on `pull_request` (`opened`, `synchronize`, `reopened`, `ready_for_review`, targeting `main`) for every PR. `detect-changes` scopes the jobs after the event, so fork, conflicted, and content-clean PRs still receive a report. Validation always checks out the live PR head repository and SHA, which avoids stale synthetic merge refs and keeps conflicted PRs in the pipeline. The unprivileged `pull_request` trigger means the workflow holds no write credentials until the final `report` job.
+`test-suite.yml` triggers on `pull_request_target` (`opened`, `synchronize`, `reopened`, `ready_for_review`, targeting `main`) for every PR. The trusted base workflow runs, while validation jobs check out and execute PR content with read-only permissions. `detect-changes` scopes the jobs after the event, so fork, conflicted, and content-clean PRs still receive a report. Validation always checks out the live PR head repository and SHA, which avoids stale synthetic merge refs and keeps conflicted PRs in the pipeline. Only the final `report` job has write permissions, and it executes report tooling from the trusted base revision.
 
 Two extra entry points cover open PRs that get no pushes:
 

@@ -2572,6 +2572,55 @@ add_satellite_from_payload = {
 	refresh_bulk_deorbit_state = yes
 }
 
+add_satellite_payloads_from_startup = {
+	resize_array = { GNSS_satellite_array = 12 }
+	resize_array = { COM_satellite_array = 12 }
+	resize_array = { SPY_satellite_array = 12 }
+	resize_array = { KILL_satellite_array = 10 }
+	clear_temp_array = sat_replaced_slots
+	set_temp_variable = { sat_limit_reported = 0 }
+	if = {
+		limit = { any_of = { array = orbit_array value = sat_orbit_model check_variable = { sat_orbit_model = 0 } } }
+		remove_bulk_deorbited_satellite_target_references = yes
+	}
+	set_satellite_capacity_counts = yes
+	for_each_loop = {
+		array = payload_array
+		value = payload_id
+		reserve_satellite_capacity = yes
+		if = {
+			limit = { check_variable = { sat_replacement_model > -1 } }
+			if = {
+				limit = { check_variable = { sat_replacement_model > 0 } }
+				replace_older_satellite = yes
+			}
+			else = { register_satellite_in_orbit = yes }
+			set_temp_variable = { sat_idx = { value = payload_id subtract = sat_family_base } }
+			if = { limit = { check_variable = { sat_family_base = 121 } } add_to_variable = { GNSS_satellite_array^sat_idx = 1 } }
+			else_if = { limit = { check_variable = { sat_family_base = 141 } } add_to_variable = { COM_satellite_array^sat_idx = 1 } }
+			else_if = { limit = { check_variable = { sat_family_base = 161 } } add_to_variable = { SPY_satellite_array^sat_idx = 1 } }
+			else_if = { limit = { check_variable = { sat_family_base = 181 } } add_to_variable = { KILL_satellite_array^sat_idx = 1 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { sat_family_base > 0 }
+				check_variable = { sat_limit_reported = 0 }
+			}
+			ROOT = { news_event = satellites.8 }
+			set_temp_variable = { sat_limit_reported = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { sat_replaced_slots^num > 0 } }
+		remove_bulk_deorbited_satellite_target_references = yes
+	}
+	clear_temp_array = sat_replaced_slots
+	set_satellites_gui = yes
+	update_satellite_owner = yes
+	clear_array = payload_array
+	refresh_bulk_deorbit_state = yes
+}
+
 replace_older_satellite = {
 	set_temp_variable = { sat_replacement_slot = -1 }
 	for_loop_effect = {

@@ -15,10 +15,15 @@ on_actions = {
 							state = PREV
 						}
 					}
-					NOT = { has_state_flag = marines_commando_effect }
+					NOT = { has_state_flag = marine_demolition_cooldown }
 					OWNER = { NOT = { tag = ROOT } }
 				}
 				SF_marine_modern_demolition_effect = yes # Note that the state flag condition is not preventing it from doing 1 damage per division
+				set_state_flag = {
+					flag = marine_demolition_cooldown
+					value = 1
+					days = 30
+				}
 			}
 			if = {
 				limit = {
@@ -30,10 +35,15 @@ on_actions = {
 							state = PREV
 						}
 					}
-					NOT = { has_state_flag = marines_commando_effect }
+					NOT = { has_state_flag = marine_logistics_raiding_cooldown }
 					OWNER = { NOT = { tag = ROOT } }
 				}
 				SF_marine_logistics_raiding_effect = yes
+				set_state_flag = {
+					flag = marine_logistics_raiding_cooldown
+					value = 1
+					days = 30
+				}
 			}
 		}
 	}
@@ -54,10 +64,15 @@ on_actions = {
 							state = PREV
 						}
 					}
-					NOT = { has_state_flag = para_drop_effect }
+					NOT = { has_state_flag = airborne_sabotage_cooldown }
 					CONTROLLER = { NOT = { tag = FROM } }
 				}
 				SF_PARA_sabotage_effect = yes
+				set_state_flag = {
+					flag = airborne_sabotage_cooldown
+					value = 1
+					days = 30
+				}
 			}
 			if = {
 				limit = {
@@ -76,9 +91,14 @@ on_actions = {
 							}
 						}
 					}
-					NOT = { has_state_flag = para_drop_effect }
+					NOT = { has_state_flag = airborne_combat_jumps_cooldown }
 				}
 				SF_PARA_combat_effect = yes
+				set_state_flag = {
+					flag = airborne_combat_jumps_cooldown
+					value = 1
+					days = 30
+				}
 			}
 		}
 	}
@@ -750,10 +770,11 @@ on_actions = {
 				if = { # 1920 RB
 					limit = {
 						has_country_flag = IRQ_1920_revolution_brigades
+						country_exists = IRQ
+						IRQ = { has_war = no }
 						NOT = {
 							OR = {
 								country_exists = ISI
-								country_exists = IRQ
 								country_exists = GMC
 								country_exists = AWD
 								country_exists = ATC
@@ -762,8 +783,8 @@ on_actions = {
 							}
 						}
 					}
-					news_event = axis_of_resistance_events.44
 					IRQ = {
+						news_event = axis_of_resistance_events.44
 						annex_country = { target = ISI transfer_troops = yes }
 						annex_country = { target = GMC transfer_troops = yes }
 						annex_country = { target = AWD transfer_troops = yes }
@@ -802,27 +823,27 @@ on_actions = {
 							}
 						}
 					}
-					annex_country = { target = ISI transfer_troops = yes }
-					#annex_country = { target = GMC transfer_troops = yes }
-					annex_country = { target = AWD transfer_troops = yes }
-					annex_country = { target = NTR transfer_troops = yes }
-					annex_country = { target = ATC transfer_troops = yes }
-					annex_country = { target = HII transfer_troops = yes }
-					annex_country = { target = IAI transfer_troops = yes }
-					drop_cosmetic_tag = yes
-					clear_variable = dynamic_flag_variant
-					clr_country_flag = is_IRAQ
-					clr_country_flag = IRQ_GMCIR
-					set_temp_variable = { rul_party_temp = 21 }
-					change_ruling_party_effect = yes
-					set_political_party = {
-						ideology = nationalist
-						popularity = 48
-					}
-					set_temp_variable = { rul_party_temp = 21 }
-					change_ruling_party_effect = yes
-					set_cosmetic_tag = IRQ
 					IRQ = {
+						annex_country = { target = ISI transfer_troops = yes }
+						#annex_country = { target = GMC transfer_troops = yes }
+						annex_country = { target = AWD transfer_troops = yes }
+						annex_country = { target = NTR transfer_troops = yes }
+						annex_country = { target = ATC transfer_troops = yes }
+						annex_country = { target = HII transfer_troops = yes }
+						annex_country = { target = IAI transfer_troops = yes }
+						drop_cosmetic_tag = yes
+						clear_variable = dynamic_flag_variant
+						clr_country_flag = is_IRAQ
+						clr_country_flag = IRQ_GMCIR
+						set_temp_variable = { rul_party_temp = 21 }
+						change_ruling_party_effect = yes
+						set_political_party = {
+							ideology = nationalist
+							popularity = 48
+						}
+						set_temp_variable = { rul_party_temp = 21 }
+						change_ruling_party_effect = yes
+						set_cosmetic_tag = IRQ
 						if = {
 							limit = {
 								PREV = {
@@ -880,10 +901,11 @@ on_actions = {
 				if = { # Baathist Mods
 					limit = {
 						has_country_flag = IRQ_AlAwda
+						country_exists = IRQ
+						IRQ = { has_war = no }
 						NOT = {
 							OR = {
 								country_exists = ISI
-								country_exists = IRQ
 								country_exists = GMC
 								#country_exists = AWD
 								#country_exists = NTR
@@ -893,25 +915,25 @@ on_actions = {
 							}
 						}
 					}
-					annex_country = { target = ISI transfer_troops = yes }
-					annex_country = { target = GMC transfer_troops = yes }
-					#annex_country = { target = AWD transfer_troops = yes }
-					#annex_country = { target = NTR transfer_troops = yes }
-					annex_country = { target = ATC transfer_troops = yes }
-					annex_country = { target = HII transfer_troops = yes }
-					annex_country = { target = IAI transfer_troops = yes }
-					drop_cosmetic_tag = yes
-					clear_variable = dynamic_flag_variant
-					clr_country_flag = is_IRAQ
-					clr_country_flag = IRQ_AlAwda
-					set_temp_variable = { rul_party_temp = 7 }
-					change_ruling_party_effect = yes
-					set_political_party = {
-						ideology = communism
-						popularity = 48
-					}
-					set_cosmetic_tag = IRQ
 					IRQ = {
+						annex_country = { target = ISI transfer_troops = yes }
+						annex_country = { target = GMC transfer_troops = yes }
+						#annex_country = { target = AWD transfer_troops = yes }
+						#annex_country = { target = NTR transfer_troops = yes }
+						annex_country = { target = ATC transfer_troops = yes }
+						annex_country = { target = HII transfer_troops = yes }
+						annex_country = { target = IAI transfer_troops = yes }
+						drop_cosmetic_tag = yes
+						clear_variable = dynamic_flag_variant
+						clr_country_flag = is_IRAQ
+						clr_country_flag = IRQ_AlAwda
+						set_temp_variable = { rul_party_temp = 7 }
+						change_ruling_party_effect = yes
+						set_political_party = {
+							ideology = communism
+							popularity = 48
+						}
+						set_cosmetic_tag = IRQ
 						retire_country_leader = yes
 						random_list = {
 							65 = {
@@ -942,7 +964,8 @@ on_actions = {
 				if = { # Badr Victory
 					limit = {
 						has_country_flag = IRQ_badr_oponent
-						has_war = no
+						country_exists = IRQ
+						IRQ = { has_war = no }
 					}
 					news_event = iraqi_flavor_events.9
 					IRQ = {
@@ -1155,21 +1178,6 @@ on_actions = {
 					else_if = {
 						limit = {
 							OR = {
-								western_autocrats_are_in_power = yes
-								check_variable = { ruling_party = 7 }
-								check_variable = { ruling_party = 13 }
-								check_variable = { ruling_party = 22 }
-							}
-						}
-						meta_effect = {
-							text = { set_cosmetic_tag = [ROOTTAG]_AUTH_S }
-							ROOTTAG = "[?original_tag.GetTag]"
-						}
-						set_variable = { dynamic_flag_variant = 3 }
-					}
-					else_if = {
-						limit = {
-							OR = {
 								check_variable = { ruling_party = 4 }
 								check_variable = { ruling_party = 10 }
 								check_variable = { ruling_party = 19 }
@@ -1198,7 +1206,6 @@ on_actions = {
 					}
 					else = {
 						drop_cosmetic_tag = yes
-						clear_variable = dynamic_flag_variant
 						clear_variable = dynamic_flag_variant
 					}
 				}
@@ -1371,6 +1378,16 @@ on_actions = {
 	on_civil_war_end_before_annexation = {
 		effect = {
 			if = {
+				limit = { has_country_flag = fighting_jihadis }
+				clr_country_flag = fighting_jihadis
+			}
+			FROM = {
+				if = {
+					limit = { has_country_flag = fighting_jihadis }
+					clr_country_flag = fighting_jihadis
+				}
+			}
+			if = {
 				limit = {
 					OR = {
 						FROM = { tag = ITA }
@@ -1506,13 +1523,13 @@ on_actions = {
 					limit = {
 						check_variable = { debt < FROM.debt }
 					}
-					add_to_variable = { debt = FROM.debt }
+					set_variable = { debt = FROM.debt }
 				}
 				if = {
 					limit = {
 						check_variable = { int_investments < FROM.int_investments } #less than
 					}
-					add_to_variable = { int_investments = FROM.int_investments }
+					set_variable = { int_investments = FROM.int_investments }
 				}
 				if = {
 					limit = { NOT = { has_country_flag = generic_civil_war_skip_elections } }
@@ -1647,6 +1664,7 @@ on_actions = {
 					division_template = "National Militia"
 					disband = yes
 				}
+				clr_country_flag = civil_war_units_spawned_flag
 			}
 			#South Sudanese civil war end
 			if = {
@@ -2469,7 +2487,7 @@ on_actions = {
 										add_core_of = ISI
 									}
 									if = {
-										limit = { PREV = { original_tag = SYR } }
+										limit = { FROM = { original_tag = SYR } }
 										if = {
 											limit = { country_exists = FSA }
 											declare_war_on = {
@@ -2486,7 +2504,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = FSA } }
+										limit = { FROM = { original_tag = FSA } }
 										if = {
 											limit = { country_exists = SYR }
 											declare_war_on = {
@@ -2503,7 +2521,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = IRQ } }
+										limit = { FROM = { original_tag = IRQ } }
 										if = {
 											limit = { country_exists = KUR }
 											declare_war_on = {
@@ -2513,7 +2531,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = GNA } }
+										limit = { FROM = { original_tag = GNA } }
 										if = {
 											limit = { country_exists = GNC }
 											declare_war_on = {
@@ -2530,7 +2548,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = GNC } }
+										limit = { FROM = { original_tag = GNC } }
 										if = {
 											limit = { country_exists = GNA }
 											declare_war_on = {
@@ -2547,7 +2565,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = HOR } }
+										limit = { FROM = { original_tag = HOR } }
 										if = {
 											limit = { country_exists = GNC }
 											declare_war_on = {
@@ -2571,7 +2589,7 @@ on_actions = {
 										}
 									}
 									if = {
-										limit = { PREV = { original_tag = YEM } }
+										limit = { FROM = { original_tag = YEM } }
 										if = {
 											limit = { country_exists = HOU }
 											declare_war_on = {

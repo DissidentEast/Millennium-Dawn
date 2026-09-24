@@ -40,6 +40,7 @@ ideas = {
 		#The permanent members of the United Nations Security Council
 		p5_member = {
 			picture = p5_member
+			allowed_civil_war = { always = yes }
 
 			on_add = {
 				log = "[GetDateText]: [Root.GetName]: Idea p5_member added"
@@ -116,6 +117,8 @@ ideas = {
 		}
 		# Antarctic Treaty
 		at_member = {
+			allowed_civil_war = { always = yes }
+
 			on_add = {
 				if = {
 					limit = { NOT = { is_in_array = { global.at_members = THIS } } }
@@ -130,6 +133,8 @@ ideas = {
 			}
 
 			on_remove = {
+				clr_country_flag = antarctica_atcp_application_pending
+				clr_country_flag = is_antarctica_atcp_consultative_member
 				if = {
 					limit = { is_in_array = { global.at_members = THIS } }
 					remove_from_array = { global.at_members = THIS }

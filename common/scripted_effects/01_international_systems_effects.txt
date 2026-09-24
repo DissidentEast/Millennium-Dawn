@@ -2740,10 +2740,151 @@ remove_stale_ga_membership_votes_for_this = {
 	un_purge_queued_sc_votes_for_this = yes
 }
 
+P5_resync_member_array = {
+	clear_array = md_p5_members_to_remove
+	for_each_scope_loop = {
+		array = global.p5_sc_members
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_idea = p5_member }
+					NOT = { exists = yes }
+				}
+			}
+			add_to_array = { ROOT.md_p5_members_to_remove = THIS }
+		}
+	}
+	if = {
+		limit = { has_idea = p5_member }
+		set_temp_variable = { md_p5_security_reconciled = 0 }
+		if = {
+			limit = { is_in_array = { global.security_council_members = THIS } }
+			set_temp_variable = { md_p5_security_reconciled = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { ROOT.md_p5_members_to_remove^num = 1 } }
+			set_temp_variable = { md_p5_security_council_seat = -1 }
+			set_temp_variable = { md_p5_stale_security_seat_matches = 0 }
+			for_each_loop = {
+				array = global.security_council_members
+				value = p5_candidate
+				index = p5_seat
+				if = {
+					limit = {
+						is_in_array = { array = ROOT.md_p5_members_to_remove value = p5_candidate }
+					}
+					add_to_temp_variable = { md_p5_stale_security_seat_matches = 1 }
+					set_temp_variable = { md_p5_security_council_seat = p5_seat }
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { md_p5_stale_security_seat_matches = 1 }
+					check_variable = { md_p5_security_council_seat > 9 }
+					check_variable = { md_p5_security_council_seat < 15 }
+				}
+				set_variable = { global.security_council_members^md_p5_security_council_seat = THIS }
+				set_temp_variable = { md_p5_security_reconciled = 1 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { md_p5_stale_security_seat_matches = 0 }
+					check_variable = { global.security_council_members^num = 14 }
+				}
+				add_to_array = { global.security_council_members = THIS }
+				set_temp_variable = { md_p5_security_reconciled = 1 }
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { ROOT.md_p5_members_to_remove^num = 0 }
+				check_variable = { global.security_council_members^num = 14 }
+			}
+			add_to_array = { global.security_council_members = THIS }
+			set_temp_variable = { md_p5_security_reconciled = 1 }
+		}
+		if = {
+			limit = { check_variable = { md_p5_security_reconciled = 1 } }
+			for_each_scope_loop = {
+				array = md_p5_members_to_remove
+				remove_from_array = { global.p5_sc_members = THIS }
+			}
+			if = {
+				limit = { NOT = { is_in_array = { global.p5_sc_members = THIS } } }
+				add_to_array = { global.p5_sc_members = THIS }
+			}
+		}
+	}
+	clear_array = md_p5_members_to_remove
+	clear_variable = md_p5_security_reconciled
+	clear_variable = md_p5_security_council_seat
+	clear_variable = md_p5_stale_security_seat_matches
+}
+
+antarctica_treaty_resync_member_array = {
+	clear_array = md_at_members_to_remove
+	for_each_scope_loop = {
+		array = global.at_members
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_idea = at_member }
+					NOT = { exists = yes }
+				}
+			}
+			add_to_array = { ROOT.md_at_members_to_remove = THIS }
+		}
+	}
+	for_each_scope_loop = {
+		array = md_at_members_to_remove
+		remove_from_array = { global.at_members = THIS }
+		if = {
+			limit = { is_in_array = { global.atcp_members = THIS } }
+			remove_from_array = { global.atcp_members = THIS }
+		}
+		clr_country_flag = antarctica_atcp_application_pending
+		clr_country_flag = is_antarctica_atcp_consultative_member
+	}
+	clear_array = md_at_members_to_remove
+	if = {
+		limit = { has_idea = at_member }
+		if = {
+			limit = { NOT = { is_in_array = { global.at_members = THIS } } }
+			add_to_array = { global.at_members = THIS }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = antarctica_laboratory_dynamic_modifier } } }
+			add_dynamic_modifier = { modifier = antarctica_laboratory_dynamic_modifier }
+		}
+		antarctica_update_small_treaty_status_effects = yes
+		antarctica_rebuild_regular_at_member_list = yes
+	}
+}
+
 clear_united_nations_member_state = {
 	revoke_un_esco_subsidies = yes
 	revoke_un_ido_subsidies = yes
 	revoke_un_cdf_subsidies = yes
+	clear_variable = united_nations_base_expenses
+	clear_variable = united_nations_expenses
+	clear_variable = united_nations_old_aid_expenses
+	clear_variable = united_nations_contribution_percent
+	clear_variable = united_nations_esco_mandatory_funding
+	clear_variable = united_nations_unescoe_funding
+	clear_variable = united_nations_esco_optional_funding
+	clear_variable = united_nations_ido_mandatory_funding
+	clear_variable = united_nations_unido_funding
+	clear_variable = united_nations_ido_optional_funding
+	clear_variable = united_nations_cdf_mandatory_funding
+	clear_variable = united_nations_uncdf_funding
+	clear_variable = united_nations_cdf_optional_funding
+	clear_variable = united_nations_aid_expenses
+	clear_variable = united_nations_aid_program_contribution_percent
+	clear_variable = united_nations_political_power_var
+	clear_variable = united_nations_influence_gain_var
+	clear_variable = united_nations_influence_defense_var
+	clear_variable = united_nations_investment_duration_var
+	clear_variable = united_nations_investment_cost_var
 
 	if = {
 		limit = { check_variable = { global.unsc_permanent_seat_applicant = THIS.id } }
@@ -2820,30 +2961,39 @@ clear_united_nations_member_state = {
 				set_temp_variable = { md_dead_sc_seat = i }
 			}
 		}
-		set_temp_variable = { md_sc_seat_filled = 0 }
-		random_scope_in_array = {
-			array = global.UN_general_assembly
-			limit = {
-				exists = yes
-				has_capitulated = no
-				NOT = { tag = PREV }
-				NOT = { is_in_array = { global.security_council_members = THIS } }
-				NOT = { is_in_array = { global.p5_sc_members = THIS } }
-				NOT = { is_in_array = { global.new_council_members = THIS } }
-				NOT = { is_in_array = { global.confirmed_new_council_members = THIS } }
-				NOT = { has_idea = lacks_international_recognition }
-				NOT = { has_idea = non_state_actor }
+		if = {
+			limit = { check_variable = { md_dead_sc_seat < 10 } }
+			set_temp_variable = { md_sc_seat_filled = 0 }
+			random_scope_in_array = {
+				array = global.UN_general_assembly
+				limit = {
+					exists = yes
+					has_capitulated = no
+					NOT = { tag = PREV }
+					NOT = { is_in_array = { global.security_council_members = THIS } }
+					NOT = { is_in_array = { global.p5_sc_members = THIS } }
+					NOT = { is_in_array = { global.new_council_members = THIS } }
+					NOT = { is_in_array = { global.confirmed_new_council_members = THIS } }
+					NOT = { has_idea = lacks_international_recognition }
+					NOT = { has_idea = non_state_actor }
+				}
+				PREV = {
+					set_temp_variable = { md_sc_replacement = PREV }
+					set_temp_variable = { md_sc_seat_filled = 1 }
+				}
 			}
-			PREV = {
-				set_temp_variable = { md_sc_replacement = PREV }
-				set_temp_variable = { md_sc_seat_filled = 1 }
+			if = {
+				limit = { check_variable = { md_sc_seat_filled = 1 } }
+				set_variable = { global.security_council_members^md_dead_sc_seat = md_sc_replacement }
+			} else = {
+				remove_from_array = { global.security_council_members = THIS }
 			}
 		}
-		if = {
-			limit = { check_variable = { md_sc_seat_filled = 1 } }
-			set_variable = { global.security_council_members^md_dead_sc_seat = md_sc_replacement }
-		} else = {
-			remove_from_array = { global.security_council_members = THIS }
+		else = {
+			if = {
+				limit = { NOT = { has_idea = p5_member } }
+				remove_from_array = { global.security_council_members = THIS }
+			}
 		}
 	}
 	if = {
@@ -2986,5 +3136,13 @@ remove_from_secondary_membership_arrays = {
 	if = {
 		limit = { is_in_array = { global.Unrecognised_States = THIS } }
 		remove_from_array = { global.Unrecognised_States = THIS }
+	}
+	if = {
+		limit = { is_in_array = { global.mercosur_member_state = THIS } }
+		remove_from_array = { global.mercosur_member_state = THIS }
+	}
+	if = {
+		limit = { is_in_array = { global.unasul_member_state = THIS } }
+		remove_from_array = { global.unasul_member_state = THIS }
 	}
 }

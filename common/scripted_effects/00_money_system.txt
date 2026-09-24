@@ -2502,6 +2502,7 @@ calculate_debt_fx_factor = {
 # Effect: calculate_interest_rate
 # Purpose: Computes daily interest rate on debt based on debt-to-GDP ratio, monetary policy, and world threat
 calculate_interest_rate = {
+	clamp_variable = { var = debt min = 0 }
 	# Handle no debt case - skip all debt calculations
 	if = {
 		limit = { check_variable = { debt = 0 } }
@@ -2653,6 +2654,10 @@ restructure_debt_after_financial_collapse = {
 # Effect: update_military_rate
 # Purpose: Computes daily military upkeep: defence-industry cost plus fielded-unit personnel cost
 update_military_rate = {
+	set_temp_variable = { inflation_multiplier = { value = 1 add = modifier@inflation_cost_multiplier_modifier } }
+	set_temp_variable = { num_missile_silo = { value = 0 every_collection = { named_collection = controlled_states_collection add = building_level@rocket_site } } }
+	set_temp_variable = { num_anti_air_building = { value = 0 every_collection = { named_collection = controlled_states_collection add = building_level@anti_air_building } } }
+
 	# Recreate the Array
 	resize_array = { array = array_defence_spend size = 10 value = 0 }
 
@@ -4084,13 +4089,13 @@ calculate_additional_expense_rate = {
 		}
 		if = {
 			limit = { has_idea = subsidized_counter_terror_operations }
-			set_variable = { additional_expense_subsidized_counter_terror_operations = { value = gdp_total_display multiply = 0.006 } }
+			set_variable = { additional_expense_subsidized_counter_terror_operations = { value = gdp_total multiply = 0.006 } }
 			add_to_variable = { additional_expenses_rate = additional_expense_subsidized_counter_terror_operations }
 		}
 		if = {
 			limit = { has_idea = idea_syrian_development_projects }
-			set_variable = { additional_expense_syrian_development_projects = { value = gdp_total_display multiply = 0.005 } }
-			add_to_variable = { additional_expenses_rate = additional_expense_subsidized_counter_terror_operations }
+			set_variable = { additional_expense_syrian_development_projects = { value = gdp_total multiply = 0.005 } }
+			add_to_variable = { additional_expenses_rate = additional_expense_syrian_development_projects }
 		}
 	}
 	else_if = {
@@ -4512,6 +4517,12 @@ calculate_resource_sale_rate = {
 # Effect: update_display
 # Purpose: Aggregates expense streams and computes net treasury change for the UI
 update_display = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = united_nations_member } } }
+		set_variable = { united_nations_aid_expenses = 0 }
+		set_variable = { united_nations_expenses = 0 }
+	}
+
 	set_variable = {
 		display_expense = {
 			value = bureaucracy_gain
@@ -6058,7 +6069,6 @@ calculate_gdp = {
 	}
 
 	# Store as persistent variable for corporate tax calculation in calculate_tax_gain
-	set_variable = { healthcare_gdp_var = gdp_from_healthcare }
 
 	set_variable = {
 		gdp_total = {
@@ -6177,6 +6187,15 @@ calculate_gdp = {
 		value = {
 			value = overall_productivity
 			divide = { value = global.productivity_center clamp = { min = 1000 max = 100000000 } }
+		}
+	}
+	set_variable = {
+		healthcare_gdp_var = {
+			value = gdp_from_healthcare
+			multiply = {
+				value = overall_productivity
+				divide = { value = global.productivity_center clamp = { min = 1000 max = 100000000 } }
+			}
 		}
 	}
 
@@ -6739,6 +6758,14 @@ recalculate_resources_price = {
 	set_temp_variable = { sum_chromium = { value = 0 every_collection = { named_collection = all_countries_collection add = resource_exported@chromium } } }
 	set_temp_variable = { sum_microchips = { value = 0 every_collection = { named_collection = all_countries_collection add = resource_exported@microchips } } }
 	set_temp_variable = { sum_composites = { value = 0 every_collection = { named_collection = all_countries_collection add = resource_exported@composites } } }
+	clamp_temp_variable = { var = sum_steel min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_rubber min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_oil min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_alum min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_tungsten min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_chromium min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_microchips min = 0.001 max = @math_expressions_max }
+	clamp_temp_variable = { var = sum_composites min = 0.001 max = @math_expressions_max }
 
 	set_temp_variable = { sum_import_steel = { value = 0 every_collection = { named_collection = all_countries_collection add = resource_imported@steel } } }
 	set_temp_variable = { sum_import_rubber = { value = 0 every_collection = { named_collection = all_countries_collection add = resource_imported@rubber } } }
@@ -7020,6 +7047,9 @@ calculate_base_program_contributions = {
 update_optional_contributions = {
 	# United Nations Contribution Expenses
 	if = { limit = { has_dynamic_modifier = { modifier = united_nations_member } }
+		clamp_variable = { var = united_nations_esco_optional_funding min = 0 max = 5 }
+		clamp_variable = { var = united_nations_ido_optional_funding min = 0 max = 5 }
+		clamp_variable = { var = united_nations_cdf_optional_funding min = 0 max = 5 }
 		set_variable = { united_nations_aid_expenses = 0 }
 		if = {
 			limit = {
@@ -7070,6 +7100,15 @@ update_optional_contributions = {
 # Effect: calculate_un_program_budgets
 # Purpose: Distributes UN operating budget among UN programs (UNESCO, UNDIO, UNCDF)
 calculate_un_program_budgets = {
+	set_variable = {
+		global.total_aid_expenses_sum = {
+			value = 0
+			every_collection = {
+				named_collection = un_general_assembly_members_collection
+				add = united_nations_aid_expenses
+			}
+		}
+	}
 	set_temp_variable = { base_budget_number = { value = global.un_operating_budget_base divide = 3 } }
 
 	set_variable = {
@@ -7202,7 +7241,7 @@ calcluate_program_distributions = {
 		set_variable = { un_cdf_productivity_var = { value = prod_var multiply = 0.2 clamp = { min = 0 max = 0.30 } } }
 		set_variable = { un_cdf_construction_cost_var = cost_var }
 	}
-	set_variable = { global.full_aid_budget_calculator = { value = global.uncdf_budget add = global.undio_budget add = global.unescoe_budget } }
+	set_variable = { global.full_aid_budget_calculator = { value = global.uncdf_budget add = global.undio_budget add = global.unescoe_budget clamp = { min = 0.001 max = @math_expressions_max } } }
 
 	every_collection_element = {
 		input = { input = collection:un_general_assembly_members_collection }

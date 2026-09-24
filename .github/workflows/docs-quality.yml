@@ -9,6 +9,17 @@ on:
       - ".github/workflows/docs-quality.yml"
   workflow_dispatch:
   workflow_call:
+    inputs:
+      repository:
+        description: "Repository containing the docs revision to validate"
+        required: false
+        type: string
+        default: ""
+      ref:
+        description: "Git ref or SHA to validate"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -21,6 +32,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.repository || github.repository }}
+          ref: ${{ inputs.ref || github.sha }}
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: |

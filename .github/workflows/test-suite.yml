@@ -7,7 +7,7 @@ run-name: >-
   github.event.pull_request.base.sha || github.sha }}
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
   workflow_dispatch:
@@ -49,6 +49,7 @@ env:
     resources/documentation
     .claude
     .github/actions/setup-md-python/action.yml
+    .github/dependabot.yml
     CLAUDE.md
     pyproject.toml
     *.mod
@@ -113,7 +114,13 @@ jobs:
           requested_head_sha="$INPUT_HEAD_SHA"
           head_repository="${EVENT_HEAD_REPOSITORY:-$GITHUB_REPOSITORY}"
           head_sha="${EVENT_HEAD_SHA:-$GITHUB_SHA}"
-          base_sha="${INPUT_BASE_SHA:-$EVENT_BASE_SHA}"
+          base_sha="$EVENT_BASE_SHA"
+          if [ -z "$base_sha" ]; then
+            base_sha="$INPUT_BASE_SHA"
+          fi
+          if [ -z "$base_sha" ]; then
+            base_sha="$GITHUB_SHA"
+          fi
           if [ -n "$pr_number" ]; then
             pr_url="repos/$GITHUB_REPOSITORY/pulls/$pr_number"
             pr_json=$(gh api "$pr_url")
@@ -121,13 +128,8 @@ jobs:
               | jq -r '.head.repo.full_name // empty')
             head_sha=$(printf '%s' "$pr_json" \
               | jq -r '.head.sha // empty')
-            if [ -z "$base_sha" ]; then
-              base_ref=$(printf '%s' "$pr_json" | jq -r '.base.ref')
-              base_sha=$(gh api \
-                "repos/$GITHUB_REPOSITORY/commits/$base_ref" --jq '.sha')
-            fi
+            base_sha=$(printf '%s' "$pr_json" | jq -r '.base.sha // empty')
           fi
-          base_sha="${base_sha:-$GITHUB_SHA}"
           if [ -n "$requested_head_sha" ] &&
               [ "$head_sha" != "$requested_head_sha" ]; then
             echo "::error::The PR head changed before validation was dispatched"
@@ -165,6 +167,20 @@ jobs:
           git fetch --no-tags \
             "https://github.com/${{ github.repository }}.git" "$BASE_SHA"
 
+      - name: Checkout trusted base change detection
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ steps.resolve-ref.outputs.base-sha }}
+          path: trusted-base
+          fetch-depth: 1
+          filter: blob:none
+          persist-credentials: false
+          sparse-checkout: |
+            tools/validation/collect_changed_files.py
+            tools/validation/change_groups.py
+          sparse-checkout-cone-mode: false
+
       - name: Derive changed files
         env:
           BASE_SHA: ${{ steps.resolve-ref.outputs.base-sha }}
@@ -177,7 +193,7 @@ jobs:
             localisation/english/MD_politics_view_parties_l_english.yml \
             "$hook_path" > party-loc-scope.diff
           git diff --name-status -z "$merge_base" "$HEAD_SHA" \
-            | python3 tools/validation/collect_changed_files.py \
+            | python3 trusted-base/tools/validation/collect_changed_files.py \
             > changed-files.txt
           wc -l changed-files.txt
 
@@ -185,10 +201,11 @@ jobs:
         id: groups
         run: |
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
-            python3 tools/validation/change_groups.py --dispatch \
+            python3 trusted-base/tools/validation/change_groups.py --dispatch \
               < /dev/null
           else
-            python3 tools/validation/change_groups.py < changed-files.txt
+            python3 trusted-base/tools/validation/change_groups.py \
+              < changed-files.txt
           fi
 
       - name: Upload changed files
@@ -199,7 +216,7 @@ jobs:
           path: |
             changed-files.txt
             party-loc-scope.diff
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7
 
   validate-paths:
@@ -448,6 +465,7 @@ jobs:
             .pre-commit-config.yaml
             .claude/docs/typo-watchlist.md
             .github/actions/setup-md-python/action.yml
+            .github/dependabot.yml
             common
             events
             history
@@ -896,6 +914,9 @@ jobs:
       needs.detect-changes.outputs.docs == 'true' ||
       needs.detect-changes.outputs.full_suite == 'true'
     uses: ./.github/workflows/docs-quality.yml
+    with:
+      repository: ${{ needs.detect-changes.outputs.checkout-repository }}
+      ref: ${{ needs.detect-changes.outputs.head-sha }}
     permissions:
       contents: read
 
@@ -924,13 +945,11 @@ jobs:
         needs.detect-changes.outputs.full_suite == 'true') &&
         'full' || 'partial' }}
     steps:
-      - name: Checkout report tooling
+      - name: Checkout trusted base report tooling
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: >-
-            ${{ needs.detect-changes.outputs.checkout-repository ||
-            github.repository }}
-          ref: ${{ needs.detect-changes.outputs.checkout-ref || github.sha }}
+          repository: ${{ github.repository }}
+          ref: ${{ needs.detect-changes.outputs.base-sha }}
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: |
@@ -968,17 +987,56 @@ jobs:
 
       - name: Download all validation results
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
-        continue-on-error: true
         with:
           pattern: "*results"
           path: validation-results
+          if-no-artifact-found: ignore
 
       - name: Download changed files
-        continue-on-error: true
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: changed-files
           path: changed-files
+
+      - name: Verify report inputs
+        env:
+          VALIDATE_PATHS_SELECTED: ${{ needs.detect-changes.outputs.file-paths }}
+          TOOLS_TESTS_SELECTED: >-
+            ${{ (needs.detect-changes.outputs.full_suite == 'true' ||
+            needs.detect-changes.outputs.tools == 'true') && 'true' || 'false' }}
+          MOD_TESTS_SELECTED: >-
+            ${{ (needs.detect-changes.outputs.full_suite == 'true' ||
+            needs.detect-changes.outputs.content == 'true') && 'true' || 'false' }}
+          DOCS_QUALITY_SELECTED: >-
+            ${{ (needs.detect-changes.outputs.full_suite == 'true' ||
+            needs.detect-changes.outputs.docs == 'true') && 'true' || 'false' }}
+          STYLE_SELECTED: ${{ needs.detect-changes.outputs.style }}
+        run: |
+          test -f changed-files/changed-files.txt
+          test -f changed-files/party-loc-scope.diff
+          if [ "$VALIDATE_PATHS_SELECTED" = "true" ]; then
+            test -f validation-results/validation-file-paths-results/validation-file-paths.log
+            test -f validation-results/validation-file-paths-results/validation-file-paths.json
+          fi
+          if [ "$TOOLS_TESTS_SELECTED" = "true" ]; then
+            for os in Linux macOS Windows; do
+              test -f "validation-results/tools-tests-$os-results/suite-run.json"
+            done
+          fi
+          if [ "$MOD_TESTS_SELECTED" = "true" ]; then
+            for batch in core targeted-a targeted-b; do
+              test -f "validation-results/validation-batch-$batch-results/batch-manifest.json"
+            done
+          fi
+          if [ "$DOCS_QUALITY_SELECTED" = "true" ]; then
+            test -f validation-results/docs-quality-results/suite-run.json
+          fi
+          if [ "$STYLE_SELECTED" = "true" ]; then
+            test -f validation-results/validation-style-check-results/validation-style-check.log
+            test -f validation-results/validation-style-check-results/validation-style-check.json
+            test -f validation-results/validation-common-mistakes-results/validation-common-mistakes.log
+            test -f validation-results/validation-common-mistakes-results/validation-common-mistakes.json
+          fi
 
       - name: Generate and post validation report
         env:
@@ -1009,6 +1067,7 @@ jobs:
             args+=(--post-comment)
           fi
           python3 tools/generate_validation_report.py "${args[@]}"
+          test -s report.md
 
       - name: Upload combined report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -1016,6 +1075,7 @@ jobs:
         with:
           name: validation-report
           path: report.md
+          if-no-files-found: error
           retention-days: 30
 
   gate:

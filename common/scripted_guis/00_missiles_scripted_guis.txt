@@ -4731,9 +4731,13 @@ scripted_gui = {
 				set_variable = { united_nations_uncdf_funding = 0 }
 				set_variable = { united_nations_unido_funding = 0 }
 				set_variable = { united_nations_unescoe_funding = 0 }
+				set_variable = { united_nations_esco_optional_funding = 0 }
+				set_variable = { united_nations_ido_optional_funding = 0 }
+				set_variable = { united_nations_cdf_optional_funding = 0 }
 
 				custom_effect_tooltip = is_cut_all_additional_money_on_programs
 
+				calculate_base_program_contributions = yes
 				calculate_un_program_budgets = yes
 
 				#TODO: Modifiy this to have the nation exit the UN Aid programs
@@ -4904,98 +4908,146 @@ scripted_gui = {
 			}
 			is_un_increase_esco_contribution_button_click = {
 				add_to_variable = { united_nations_esco_optional_funding = 0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_esco_contribution_button_click = {
 				add_to_variable = { united_nations_esco_optional_funding = -0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_ido_contribution_button_click = {
 				add_to_variable = { united_nations_ido_optional_funding = 0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_ido_contribution_button_click = {
 				add_to_variable = { united_nations_ido_optional_funding = -0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_cdf_contribution_button_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = 0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_cdf_contribution_button_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = -0.1 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_esco_contribution_button_control_click = {
 				add_to_variable = { united_nations_esco_optional_funding = 0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_esco_contribution_button_control_click = {
 				add_to_variable = { united_nations_esco_optional_funding = -0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_ido_contribution_button_control_click = {
 				add_to_variable = { united_nations_ido_optional_funding = 0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_ido_contribution_button_control_click = {
 				add_to_variable = { united_nations_ido_optional_funding = -0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_cdf_contribution_button_control_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = 0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_cdf_contribution_button_control_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = -0.25 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_esco_contribution_button_alt_click = {
 				add_to_variable = { united_nations_esco_optional_funding = 0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_esco_contribution_button_alt_click = {
 				add_to_variable = { united_nations_esco_optional_funding = -0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_ido_contribution_button_alt_click = {
 				add_to_variable = { united_nations_ido_optional_funding = 0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_ido_contribution_button_alt_click = {
 				add_to_variable = { united_nations_ido_optional_funding = -0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_cdf_contribution_button_alt_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = 0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_cdf_contribution_button_alt_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = -0.5 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_esco_contribution_button_shift_click = {
 				add_to_variable = { united_nations_esco_optional_funding = 1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_esco_contribution_button_shift_click = {
 				add_to_variable = { united_nations_esco_optional_funding = -1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_ido_contribution_button_shift_click = {
 				add_to_variable = { united_nations_ido_optional_funding = 1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_ido_contribution_button_shift_click = {
 				add_to_variable = { united_nations_ido_optional_funding = -1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_increase_cdf_contribution_button_shift_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = 1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 			is_un_decrease_cdf_contribution_button_shift_click = {
 				add_to_variable = { united_nations_cdf_optional_funding = -1.0 }
+				calculate_base_program_contributions = yes
+				calculate_un_program_budgets = yes
 				international_systems_update = yes
 			}
 		}

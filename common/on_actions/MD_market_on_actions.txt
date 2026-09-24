@@ -3,11 +3,11 @@ on_actions = {
 		effect = {
 			random_country = {
 				limit = { PREV = { buyer = PREV } }
-				set_temp_variable = { var_temp_buyer = THIS.id }
+				PREV = { set_temp_variable = { var_temp_buyer = PREV.id } }
 			}
 			random_country = {
 				limit = { PREV = { seller = PREV } }
-				set_temp_variable = { var_temp_seller = THIS.id }
+				PREV = { set_temp_variable = { var_temp_seller = PREV.id } }
 			}
 			if = {
 				limit = { contract_contains_equipment = infantry_weapons_type }
@@ -459,11 +459,11 @@ on_actions = {
 		effect = {
 			random_country = {
 				limit = { PREV = { buyer = PREV } }
-				set_temp_variable = { var_temp_buyer = THIS.id }
+				PREV = { set_temp_variable = { var_temp_buyer = PREV.id } }
 			}
 			random_country = {
 				limit = { PREV = { seller = PREV } }
-				set_temp_variable = { var_temp_seller = THIS.id }
+				PREV = { set_temp_variable = { var_temp_seller = PREV.id } }
 			}
 			if = {
 				limit = { contract_contains_equipment = infantry_weapons_type }
@@ -915,11 +915,11 @@ on_actions = {
 		effect = {
 			random_country = {
 				limit = { PREV = { buyer = PREV } }
-				set_temp_variable = { var_temp_buyer = THIS.id }
+				PREV = { set_temp_variable = { var_temp_buyer = PREV.id } }
 			}
 			random_country = {
 				limit = { PREV = { seller = PREV } }
-				set_temp_variable = { var_temp_seller = THIS.id }
+				PREV = { set_temp_variable = { var_temp_seller = PREV.id } }
 			}
 			if = {
 				limit = { contract_contains_equipment = infantry_weapons_type }

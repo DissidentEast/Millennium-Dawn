@@ -32,6 +32,7 @@ DEVELOPER_SETUP = (
 TOOLS_README = REPO_ROOT / "tools" / "README.md"
 NIGHTLY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "nightly-pr-validation.yml"
 PR_CACHE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "pr-cache-cleanup.yml"
+DEPENDABOT = REPO_ROOT / ".github" / "dependabot.yml"
 
 SCRIPT_ROOTS = ("common", "events", "history")
 OLD_WORKFLOWS = (
@@ -147,8 +148,8 @@ def test_test_suite_replaces_old_workflows():
         "report",
         "gate",
     }
-    assert "pull_request" in _workflow_trigger(CI_WORKFLOW)
-    assert "pull_request_target" not in _workflow_trigger(CI_WORKFLOW)
+    assert "pull_request_target" in _workflow_trigger(CI_WORKFLOW)
+    assert "pull_request" not in _workflow_trigger(CI_WORKFLOW)
     leftovers = [CI_WORKFLOW.parent / name for name in OLD_WORKFLOWS]
     if any(path.exists() for path in leftovers):
         pytest.skip("old workflow deletion is pending parent cleanup")
@@ -162,12 +163,23 @@ def test_docs_quality_runs_in_suite_and_feeds_the_report():
     assert "needs.detect-changes.outputs.docs" in job["if"]
     assert "full_suite" in job["if"]
     assert "docs-quality" in workflow["jobs"]["report"]["needs"]
+    assert job["with"]["repository"] == (
+        "${{ needs.detect-changes.outputs.checkout-repository }}"
+    )
+    assert job["with"]["ref"] == "${{ needs.detect-changes.outputs.head-sha }}"
     detect = workflow["jobs"]["detect-changes"]
     assert detect["outputs"]["docs"] == "${{ steps.groups.outputs.docs }}"
     assert "workflow_call" in _workflow_trigger(DOCS_QUALITY_WORKFLOW)
     text = DOCS_QUALITY_WORKFLOW.read_text(encoding="utf-8")
     assert "suite-run.json" in text
     assert "docs-quality-results" in text
+    docs_workflow = yaml.safe_load(DOCS_QUALITY_WORKFLOW.read_text(encoding="utf-8"))
+    checkout = docs_workflow["jobs"]["docs-quality"]["steps"][0]
+    assert (
+        checkout["with"]["repository"]
+        == "${{ inputs.repository || github.repository }}"
+    )
+    assert checkout["with"]["ref"] == "${{ inputs.ref || github.sha }}"
 
 
 def test_change_groups_cover_every_batch_group():
@@ -332,8 +344,66 @@ def test_detect_changes_uses_python_grouping():
     )
     assert "changed-files.txt" in upload["with"]["path"]
     assert "party-loc-scope.diff" in upload["with"]["path"]
+    assert upload["with"]["if-no-files-found"] == "error"
     for path in ("resources/documentation/modifiers_documentation.md",):
         assert classify([path])["full_suite"] is True
+
+
+def test_detect_changes_uses_trusted_base_tooling_for_requested_diff():
+    workflow = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
+    detect = workflow["jobs"]["detect-changes"]
+    trusted_checkout = next(
+        step
+        for step in detect["steps"]
+        if step.get("name") == "Checkout trusted base change detection"
+    )
+    assert trusted_checkout["with"]["repository"] == "${{ github.repository }}"
+    assert trusted_checkout["with"]["ref"] == (
+        "${{ steps.resolve-ref.outputs.base-sha }}"
+    )
+    assert trusted_checkout["with"]["path"] == "trusted-base"
+    derive = next(
+        step["run"]
+        for step in detect["steps"]
+        if step.get("name") == "Derive changed files"
+    )
+    groups = next(
+        step["run"]
+        for step in detect["steps"]
+        if step.get("name") == "Compute changed groups"
+    )
+    resolve = next(
+        step["run"]
+        for step in detect["steps"]
+        if step.get("name") == "Resolve validation ref"
+    )
+    assert 'git merge-base "$BASE_SHA" "$HEAD_SHA"' in derive
+    assert "base_sha=$(printf" in resolve
+    assert "'.base.sha // empty'" in resolve
+    assert "git diff --name-status -z" in derive
+    assert "python3 trusted-base/tools/validation/collect_changed_files.py" in derive
+    assert "python3 trusted-base/tools/validation/change_groups.py" in groups
+    assert "python3 tools/validation/collect_changed_files.py" not in derive
+    assert "python3 tools/validation/change_groups.py" not in groups
+    fetch = next(
+        step["run"]
+        for step in detect["steps"]
+        if step.get("name") == "Fetch PR base revision"
+    )
+    assert '"$BASE_SHA"' in fetch
+
+
+def test_dependabot_targets_root_python_and_bun_manifests():
+    config = yaml.safe_load(DEPENDABOT.read_text(encoding="utf-8"))
+    entries = config["updates"]
+    pip = [entry for entry in entries if entry["package-ecosystem"] == "pip"]
+    assert [entry["directory"] for entry in pip] == ["/"]
+    bun = [entry for entry in entries if entry["package-ecosystem"] == "bun"]
+    assert {entry["directory"] for entry in bun} == {"/", "/docs"}
+    root_bun = next(entry for entry in bun if entry["directory"] == "/")
+    assert root_bun["groups"] == {"root-dependencies": {"patterns": ["*"]}}
+    assert (REPO_ROOT / "package.json").is_file()
+    assert (REPO_ROOT / "bun.lock").is_file()
 
 
 def test_dispatch_forces_all_content_groups():
@@ -385,6 +455,18 @@ def test_prepare_workspace_is_pr_code_and_cache_scoped_to_head():
     assert "base-sha" not in valcache["with"]["key"]
 
 
+def test_tools_workspace_includes_dependabot_config():
+    workflow = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
+    checkout = next(
+        step
+        for step in workflow["jobs"]["tools-tests"]["steps"]
+        if step.get("name") == "Checkout tools test tree"
+    )
+    sparse_lines = checkout["with"]["sparse-checkout"].splitlines()
+    assert ".github/dependabot.yml" in sparse_lines
+    assert " .github/dependabot.yml" not in sparse_lines
+
+
 def test_targeted_b_downloads_and_hands_off_party_loc_scope():
     workflow = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
     steps = workflow["jobs"]["mod-tests"]["steps"]
@@ -429,6 +511,9 @@ def test_report_job_posts_comment_and_checks():
     assert report["if"] == "${{ always() && !cancelled() }}"
     assert report["permissions"]["pull-requests"] == "write"
     assert report["permissions"]["checks"] == "write"
+    for name, job in workflow["jobs"].items():
+        if name != "report":
+            assert "write" not in (job.get("permissions") or {}).values()
     text = CI_WORKFLOW.read_text(encoding="utf-8")
     assert "--post-comment" in text
     assert "--checks-api" in text
@@ -438,8 +523,64 @@ def test_report_job_posts_comment_and_checks():
     checkout = next(
         step for step in report["steps"] if "actions/checkout@" in step.get("uses", "")
     )
-    assert "checkout-repository" in checkout["with"]["repository"]
-    assert "checkout-ref" in checkout["with"]["ref"]
+    assert checkout["with"]["repository"] == "${{ github.repository }}"
+    assert checkout["with"]["ref"] == ("${{ needs.detect-changes.outputs.base-sha }}")
+    sparse = set(checkout["with"]["sparse-checkout"].split())
+    assert ".github/actions/setup-md-python/action.yml" in sparse
+    assert "tools/generate_validation_report.py" in sparse
+    assert "tools/report_lib" in sparse
+    assert "checkout-repository" not in checkout["with"]["repository"]
+    assert "checkout-ref" not in checkout["with"]["ref"]
+
+
+def test_report_uses_trusted_tooling_and_fails_closed_on_missing_artifacts():
+    workflow = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
+    report = workflow["jobs"]["report"]
+    assert not any(step.get("continue-on-error") for step in report["steps"])
+    setup = next(
+        step
+        for step in report["steps"]
+        if step.get("uses") == "./.github/actions/setup-md-python"
+    )
+    assert setup["with"]["install"] == "false"
+    downloads = [
+        step
+        for step in report["steps"]
+        if "actions/download-artifact@" in step.get("uses", "")
+    ]
+    assert all("continue-on-error" not in step for step in downloads)
+    result_download = next(
+        step
+        for step in downloads
+        if step.get("name") == "Download all validation results"
+    )
+    assert result_download["with"]["if-no-artifact-found"] == "ignore"
+    verify = next(
+        step for step in report["steps"] if step.get("name") == "Verify report inputs"
+    )
+    verify_script = verify["run"]
+    for required in (
+        "test -f changed-files/changed-files.txt",
+        "test -f changed-files/party-loc-scope.diff",
+        "test -f validation-results/validation-file-paths-results/validation-file-paths.log",
+        "test -f validation-results/validation-file-paths-results/validation-file-paths.json",
+        "test -f validation-results/docs-quality-results/suite-run.json",
+        "test -f validation-results/validation-style-check-results/validation-style-check.log",
+        "test -f validation-results/validation-style-check-results/validation-style-check.json",
+        "test -f validation-results/validation-common-mistakes-results/validation-common-mistakes.log",
+        "test -f validation-results/validation-common-mistakes-results/validation-common-mistakes.json",
+    ):
+        assert required in verify_script
+    generate = next(
+        step
+        for step in report["steps"]
+        if step.get("name") == "Generate and post validation report"
+    )
+    assert "test -s report.md" in generate["run"]
+    upload = next(
+        step for step in report["steps"] if step.get("name") == "Upload combined report"
+    )
+    assert upload["with"]["if-no-files-found"] == "error"
 
 
 def test_suite_gate_requires_every_validation_job():
@@ -753,6 +894,9 @@ def test_mod_and_music_groups_are_reachable():
     assert "music/**" in GROUP_PATTERNS["content"]
     workflow = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
     assert "music" in workflow["env"]["WORKSPACE_PATHS"]
+    workspace_lines = workflow["env"]["WORKSPACE_PATHS"].splitlines()
+    assert ".github/dependabot.yml" in workspace_lines
+    assert " .github/dependabot.yml" not in workspace_lines
 
 
 def test_nightly_and_cache_workflows_keep_expected_permissions():

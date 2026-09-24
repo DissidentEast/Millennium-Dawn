@@ -417,13 +417,24 @@ leaving_EU = {
 
 # Runs in the civil-war victor's scope from on_civil_war_end.
 EU_resync_member_array = {
+	clear_array = md_eu_members_to_remove
 	for_each_scope_loop = {
 		array = global.EU_member
 		if = {
-			limit = { NOT = { has_idea = EU_member } }
-			remove_from_array = { global.EU_member = THIS }
+			limit = {
+				OR = {
+					NOT = { has_idea = EU_member }
+					NOT = { exists = yes }
+				}
+			}
+			add_to_array = { ROOT.md_eu_members_to_remove = THIS }
 		}
 	}
+	for_each_scope_loop = {
+		array = md_eu_members_to_remove
+		remove_from_array = { global.EU_member = THIS }
+	}
+	clear_array = md_eu_members_to_remove
 	# A civil-war victor inherits EU_member (allowed_civil_war) but is never run through on_add, so add it here.
 	if = {
 		limit = {

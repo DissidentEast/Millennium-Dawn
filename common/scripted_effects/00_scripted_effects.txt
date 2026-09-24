@@ -3003,7 +3003,6 @@ update_canal_blockage_flags = {
 				214 = {
 					has_dynamic_modifier = {
 						modifier = canal_damaged_modifier
-						scope = THIS
 					}
 				}
 			}
@@ -3016,7 +3015,6 @@ update_canal_blockage_flags = {
 			853 = {
 				has_dynamic_modifier = {
 					modifier = canal_damaged_modifier
-					scope = THIS
 				}
 			}
 		}
@@ -3028,7 +3026,6 @@ update_canal_blockage_flags = {
 			37 = {
 				has_dynamic_modifier = {
 					modifier = canal_damaged_modifier
-					scope = THIS
 				}
 			}
 		}

@@ -68,7 +68,8 @@ add_on_creation = {
 			add_to_variable = { global.staggered_setup_tracker = 1 }
 			add_to_array = { global.ct_third_week = THIS }
 		}
-		else = {
+		else_if = {
+			limit = { check_variable = { global.staggered_setup_tracker = 3 } }
 			set_variable = { global.staggered_setup_tracker = 0 }
 			add_to_array = { global.ct_last_week = THIS }
 		}

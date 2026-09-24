@@ -65,8 +65,8 @@ calculate_starting_mio_size = {
 	}
 
 	every_military_industrial_organization = {
-		set_variable = { free_trait_picks = tmp_lvl }
-		add_mio_size = tmp_lvl
+		set_variable = { free_trait_picks = PREV.tmp_lvl }
+		add_mio_size = PREV.tmp_lvl
 	}
 }
 
