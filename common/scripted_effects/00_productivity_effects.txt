@@ -101,12 +101,48 @@ update_employment_productivity_output_dynamic_modifier = {
 		limit = {
 			OR = {
 				NOT = { check_variable = { overall_productivity = last_productivity_check } }
+				NOT = { check_variable = { global.productivity_center = last_productivity_center } }
 				NOT = { check_variable = { industrial_complex_total = last_industrial_complex_total } }
+				NOT = { check_variable = { num_of_civilian_factories = last_num_of_civilian_factories } }
+				NOT = { check_variable = { civilian_factories_manpower_fulfillment = last_civilian_factories_manpower_fulfillment } }
+				NOT = { check_variable = { num_of_military_factories = last_num_of_military_factories } }
+				NOT = { check_variable = { military_factory_total = last_military_factory_total } }
+				NOT = { check_variable = { military_factories_manpower_fulfillment = last_military_factories_manpower_fulfillment } }
+				NOT = { check_variable = { num_of_naval_factories = last_num_of_naval_factories } }
+				NOT = { check_variable = { naval_factory_total = last_naval_factory_total } }
+				NOT = { check_variable = { naval_factories_manpower_fulfillment = last_naval_factories_manpower_fulfillment } }
+				NOT = { check_variable = { modifier@production_speed_buildings_factor = last_production_speed_buildings_factor } }
+				NOT = { check_variable = { modifier@industrial_capacity_factory = last_industrial_capacity_factory } }
+				NOT = { check_variable = { modifier@industrial_capacity_dockyard = last_industrial_capacity_dockyard } }
+				NOT = { check_variable = { modifier@production_speed_agriculture_district_factor = last_production_speed_agriculture_district_factor } }
+				AND = {
+					has_country_flag = disabled_economic_system
+					check_variable = { last_disabled_economic_system = 0 }
+				}
+				AND = {
+					NOT = { has_country_flag = disabled_economic_system }
+					check_variable = { last_disabled_economic_system = 1 }
+				}
 			}
 		}
 
 		set_variable = { last_productivity_check = overall_productivity }
+		set_variable = { last_productivity_center = global.productivity_center }
 		set_variable = { last_industrial_complex_total = industrial_complex_total }
+		set_variable = { last_num_of_civilian_factories = num_of_civilian_factories }
+		set_variable = { last_civilian_factories_manpower_fulfillment = civilian_factories_manpower_fulfillment }
+		set_variable = { last_num_of_military_factories = num_of_military_factories }
+		set_variable = { last_military_factory_total = military_factory_total }
+		set_variable = { last_military_factories_manpower_fulfillment = military_factories_manpower_fulfillment }
+		set_variable = { last_num_of_naval_factories = num_of_naval_factories }
+		set_variable = { last_naval_factory_total = naval_factory_total }
+		set_variable = { last_naval_factories_manpower_fulfillment = naval_factories_manpower_fulfillment }
+		set_variable = { last_production_speed_buildings_factor = modifier@production_speed_buildings_factor }
+		set_variable = { last_industrial_capacity_factory = modifier@industrial_capacity_factory }
+		set_variable = { last_industrial_capacity_dockyard = modifier@industrial_capacity_dockyard }
+		set_variable = { last_production_speed_agriculture_district_factor = modifier@production_speed_agriculture_district_factor }
+		set_variable = { last_disabled_economic_system = 1 }
+		if = { limit = { NOT = { has_country_flag = disabled_economic_system } } set_variable = { last_disabled_economic_system = 0 } }
 
 		#this section calculates the employment level assuming that all factories you receive from trade, leasing and other sources are at 100% employment
 		if = {
@@ -204,7 +240,7 @@ update_employment_productivity_output_dynamic_modifier = {
 				multiply = {
 					value = modifier@production_speed_agriculture_district_factor
 					subtract = agriculture_district_output_var
-					add = -2
+					add = 1
 				}
 			}
 		}

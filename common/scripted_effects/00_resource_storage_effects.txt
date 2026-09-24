@@ -23,6 +23,26 @@ resource_storage_system = {
 			clamp_variable = { var = tech_in_storage min = 0 max = max_storage }
 			clamp_variable = { var = precious_in_storage min = 0 max = max_storage }
 		}
+		else = {
+			if = { limit = { has_dynamic_modifier = { modifier = resource_storage_modifier } }
+				remove_dynamic_modifier = { modifier = resource_storage_modifier }
+			}
+			set_variable = { steel_in_storage = 0 }
+			set_variable = { rubber_in_storage = 0 }
+			set_variable = { light_in_storage = 0 }
+			set_variable = { tech_in_storage = 0 }
+			set_variable = { precious_in_storage = 0 }
+			set_variable = { steel_from_storage = 0 }
+			set_variable = { rubber_from_storage = 0 }
+			set_variable = { light_from_storage = 0 }
+			set_variable = { tech_from_storage = 0 }
+			set_variable = { precious_from_storage = 0 }
+			set_variable = { steel_storage_display = 0 }
+			set_variable = { rubber_storage_display = 0 }
+			set_variable = { light_storage_display = 0 }
+			set_variable = { tech_storage_display = 0 }
+			set_variable = { precious_storage_display = 0 }
+		}
 		if = {
 			limit = {
 				is_ai = no

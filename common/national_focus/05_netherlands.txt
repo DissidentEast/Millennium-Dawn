@@ -1334,7 +1334,7 @@ focus_tree = {
 			log = "[GetDateText]: [Root.GetName]: Focus HOL_oranje_nassau-mines"
 			47 = {
 				add_resource = {
-					type = Steel
+					type = steel
 					amount = 5
 				}
 				add_resource = {

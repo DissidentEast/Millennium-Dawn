@@ -179,8 +179,10 @@ microchip_update = {
 					value = country_microchip_production_var
 					add = {
 						value = country_microchip_produced
-						subtract = country_microchip_production_var
-						multiply = unfulfilled_energy_demand_dynmod_var
+						multiply = {
+							value = unfulfilled_energy_demand_dynmod_var
+							multiply = -1
+						}
 					}
 					round = yes
 				}
@@ -256,6 +258,7 @@ composite_update = {
 		#Gather total resources remaining
 		set_temp_variable = { country_rare_remaining = resource@chromium }
 		set_temp_variable = { country_rubber_remaining = resource@rubber }
+		set_temp_variable = { country_oil_remaining = resource@oil }
 
 		set_temp_variable = {
 			country_composite_produced = {
@@ -267,8 +270,6 @@ composite_update = {
 			}
 		}
 
-		set_temp_variable = { country_composite_reducer = 0 }
-
 		#Gather overall production demand
 		#Math is here. Unless you know the math, PLEASE do not mess with these variables
 		#First, check if we even need to do all this. If there is a surplus of both tech and precious metals, there is no need to adjust production
@@ -277,12 +278,14 @@ composite_update = {
 				OR = {
 					check_variable = { country_rare_remaining < 0 }
 					check_variable = { country_rubber_remaining < 0 }
+					check_variable = { country_oil_remaining < 0 }
 				}
 			}
 			#Invert the numbers here for a fast check. Surplus now can't be higher than demand, since it's negative
 			#Deficit now is positive, and can be used easily in the cost math since it's positive
 			multiply_temp_variable = { country_rare_remaining = -1 }
 			multiply_temp_variable = { country_rubber_remaining = -1 }
+			multiply_temp_variable = { country_oil_remaining = -1 }
 
 			set_temp_variable = {
 				country_composite_reducer = {
@@ -305,27 +308,54 @@ composite_update = {
 							}
 						}
 					}
+					add = {
+						value = 0
+						max = {
+							value = 0
+							max = country_oil_remaining
+						}
+					}
 				}
-			}
-
-			set_variable = { country_composite_production_var = country_composite_reducer }
-
-			set_temp_variable = {
-				country_composite_reducer_max = {
-					value = country_composite_produced
-					multiply = 0.95
-					round = yes
-				}
-			}
-			#Clamp the max at -90% of production, this number can be adjusted
-			clamp_variable = {
-				var = country_composite_production_var
-				min = 0
-				max = country_composite_reducer_max
 			}
 		} else = {
 			#There should be no reduction here, because we have a surplus of all inputs
-			set_variable = { country_composite_production_var = 0 }
+			set_temp_variable = { country_composite_reducer = 0 }
+		}
+
+		set_variable = { country_composite_production_var = country_composite_reducer }
+
+		set_temp_variable = {
+			country_composite_reducer_max = {
+				value = country_composite_produced
+				multiply = 0.95
+				round = yes
+			}
+		}
+
+		if = {
+			limit = {
+				check_variable = { energy_difference_variable < 0 }
+			}
+
+			set_variable = {
+				country_composite_production_var = {
+					value = country_composite_production_var
+					add = {
+						value = country_composite_produced
+						multiply = {
+							value = unfulfilled_energy_demand_dynmod_var
+							multiply = -1
+						}
+					}
+					round = yes
+				}
+			}
+		}
+
+		clamp_variable = {
+			var = country_composite_production_var
+			min = 0
+			max = country_composite_reducer_max
 		}
 	}
 	else = {

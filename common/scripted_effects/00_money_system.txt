@@ -2457,7 +2457,7 @@ calculate_additional_income_rate = {
 
 	# Energy Load Sharing Income
 	if = { limit = { check_variable = { energy_load_sharing_nations^num > 0 } }
-		set_variable = { energy_load_sharing_income_var = { value = energy_load_sharing_use_var multiply = global.price_per_gw_for_els clamp = { min = 0 max = @math_expressions_max } } }
+		set_variable = { energy_load_sharing_income_var = { value = energy_load_sharing_use_var multiply = -1 multiply = global.price_per_gw_for_els clamp = { min = 0 max = @math_expressions_max } } }
 		add_to_variable = { additional_income_rate = energy_load_sharing_income_var }
 	}
 	# CPD War Reparations Income — variable set in 02_peace_deal_effects.txt on sign
@@ -3294,6 +3294,13 @@ update_bureaucracy_rate = {
 	#Set which spending level the country is at
 	set_temp_variable = { bureau_index = { value = bureau_law subtract = 1 clamp = { min = 0 max = 4 } } }
 	set_variable = { var = bureaucracy_gain value = { value = array_bureaucracy_spend^bureau_index clamp = { min = 0 max = @math_expressions_max } } }
+	add_to_variable = {
+		var = bureaucracy_gain
+		value = {
+			value = workers_in_bureaucracy
+			multiply = @bureau_salary_per_worker
+		}
+	}
 }
 
 # Effect: update_police_rate
@@ -4700,7 +4707,7 @@ update_state_variables = {
 				value = 0
 				every_collection = {
 					named_collection = controlled_states_collection
-					add = building_level@renewable_energy_infra
+					add = non_damaged_building_level@renewable_energy_infra
 				}
 			}
 		}
@@ -4709,7 +4716,7 @@ update_state_variables = {
 				value = 0
 				every_collection = {
 					named_collection = controlled_states_collection
-					add = building_level@nuclear_reactor
+					add = non_damaged_building_level@nuclear_reactor
 				}
 			}
 		}
@@ -4754,7 +4761,7 @@ update_state_variables = {
 				value = 0
 				every_collection = {
 					named_collection = controlled_states_collection
-					add = building_level@fossil_powerplant
+					add = non_damaged_building_level@fossil_powerplant
 				}
 			}
 		}
@@ -4917,10 +4924,10 @@ update_state_variables = {
 				every_collection = {
 					named_collection = controlled_states_collection
 					if = {
-						limit = { value = building_level@renewable_energy_infra greater_than = 0 }
+						limit = { value = non_damaged_building_level@renewable_energy_infra greater_than = 0 }
 						add = {
-							value = building_level@renewable_energy_infra
-							multiply = 0.5
+							value = non_damaged_building_level@renewable_energy_infra
+							multiply = ROOT.modifier@renewable_energy_gain
 							multiply = renewable_energy_random_var
 							multiply = {
 								value = 1
@@ -4938,10 +4945,10 @@ update_state_variables = {
 				every_collection = {
 					named_collection = controlled_states_collection
 					if = {
-						limit = { value = building_level@renewable_energy_infra greater_than = 0 }
+						limit = { value = non_damaged_building_level@renewable_energy_infra greater_than = 0 }
 						add = {
-							value = building_level@renewable_energy_infra
-							multiply = 0.5
+							value = non_damaged_building_level@renewable_energy_infra
+							multiply = ROOT.modifier@renewable_energy_gain
 							multiply = min_renewable_energy_var
 							multiply = {
 								value = 1
@@ -4955,14 +4962,14 @@ update_state_variables = {
 
 		set_variable = {
 			maximum_renewable_energy_var_base = {
-				value = 1
+				value = 0
 				every_collection = {
 					named_collection = controlled_states_collection
 					if = {
-						limit = { value = building_level@renewable_energy_infra greater_than = 0 }
+						limit = { value = non_damaged_building_level@renewable_energy_infra greater_than = 0 }
 						add = {
-							value = building_level@renewable_energy_infra
-							multiply = 0.5
+							value = non_damaged_building_level@renewable_energy_infra
+							multiply = ROOT.modifier@renewable_energy_gain
 							multiply = max_renewable_energy_var
 							multiply = {
 								value = 1
@@ -4981,9 +4988,9 @@ update_state_variables = {
 				every_collection = {
 					named_collection = controlled_states_collection
 					if = {
-						limit = { value = building_level@fossil_powerplant greater_than = 0 }
+						limit = { value = non_damaged_building_level@fossil_powerplant greater_than = 0 }
 						add = {
-							value = building_level@fossil_powerplant
+							value = non_damaged_building_level@fossil_powerplant
 							multiply = 2
 							multiply = {
 								value = 1
@@ -5001,9 +5008,9 @@ update_state_variables = {
 				every_collection = {
 					named_collection = controlled_states_collection
 					if = {
-						limit = { value = building_level@nuclear_reactor greater_than = 0 }
+						limit = { value = non_damaged_building_level@nuclear_reactor greater_than = 0 }
 						add = {
-							value = building_level@nuclear_reactor
+							value = non_damaged_building_level@nuclear_reactor
 							multiply = 4
 							multiply = {
 								value = 1
@@ -5880,15 +5887,6 @@ calculate_gdp = {
 		}
 
 		subtract_from_temp_variable = { workforce_total = workers_in_bureaucracy }
-
-		# Salary cost — civil servant wages add to total bureaucracy expenditure
-		add_to_variable = {
-			var = bureaucracy_gain
-			value = {
-				value = workers_in_bureaucracy
-				multiply = @bureau_salary_per_worker
-			}
-		}
 	}
 
 	# Average Worker Fulfillment

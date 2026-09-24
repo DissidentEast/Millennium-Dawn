@@ -677,9 +677,9 @@ calculate_energy_load_sharing = {
 				array = energy_load_sharing_nations
 				var:v = {
 					# Only share if recipient has a deficit; ignore surplus
-					set_temp_variable = { energy_lack = { value = energy_difference_variable min = 0 } }
+					set_temp_variable = { energy_lack = { value = energy_difference_variable multiply = -1 } }
 					set_variable = { PREV.energy_load_sharing_nations_value^i = energy_lack }
-					set_variable = { energy_load_sharing_gain_var = { value = energy_lack multiply = -1 } }
+					set_variable = { energy_load_sharing_gain_var = energy_lack }
 				}
 			}
 			set_temp_variable = { total_energy_required_to_share = 0 }

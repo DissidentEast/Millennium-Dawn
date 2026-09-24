@@ -112,7 +112,7 @@ v2.0.1
  - [SOV] Added T-55AD and T-55AMD-1 hardkill equipment types
 
 Bugfix:
- - Fixed doctrine availability, air mastery, category casing, deep-battle tactics, doctrine XP balance, and special-forces AI progression.
+ - Fixed doctrine availability, air mastery, category casing, deep-battle tactics, doctrine XP balance, special-forces AI progression, and economy/industry calculations.
  - Fixed civil-war victory scopes and inheritance, market/MIO initialization, UN and debt state, doctrine cooldowns, satellite startup batching, and validation report trust boundaries.
  - [ENG] Fixed Shift + Click subsidies for Wales and royal decision error spam, removed the unresolved referendum vote line from the devolution tooltips, and each union settlement vote now locks its region for 5 years (Issue #4750, Issue #4754, Issue #4755)
  - [SYR/TUR] Fixed Historic Enemies remaining between Syria and Turkey after the Muslim Brotherhood wins Syria's free elections (Issue #4303)
