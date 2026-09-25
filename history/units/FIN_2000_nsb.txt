@@ -13,8 +13,8 @@ division_template = {
 		Arm_Inf_Bat = { x = 1 y = 0 }
 		Arm_Inf_Bat = { x = 1 y = 1 }
 
-		SP_arty_Bat = { x = 2 y = 0 }
-		SP_arty_Bat = { x = 2 y = 1 }
+		SP_Arty_Bat = { x = 2 y = 0 }
+		SP_Arty_Bat = { x = 2 y = 1 }
 		SP_R_arty_Bat = { x = 2 y = 2 }
 	}
 
@@ -51,7 +51,7 @@ division_template = {
 		SP_AA_Battery = { x = 0 y = 0 }
 		combat_service_support_company = { x = 0 y = 1 }
 		H_Engi_Comp = { x = 0 y = 2 }
-		SP_R_arty_Battery = { x = 0 y = 3 }
+		SP_R_arty_battery = { x = 0 y = 3 }
 	}
 }
 division_template = {
@@ -64,7 +64,7 @@ division_template = {
 		Mech_Inf_Bat = { x = 0 y = 1 }
 		Mech_Inf_Bat = { x = 0 y = 2 }
 
-		SP_arty_Bat = { x = 1 y = 0 }
+		SP_Arty_Bat = { x = 1 y = 0 }
 	}
 
 	regimental_support = {
@@ -75,7 +75,7 @@ division_template = {
 		SP_AA_Battery = { x = 0 y = 0 }
 		combat_service_support_company = { x = 0 y = 1 }
 		H_Engi_Comp = { x = 0 y = 2 }
-		SP_R_arty_Battery = { x = 0 y = 3 }
+		SP_R_arty_battery = { x = 0 y = 3 }
 	}
 }
 
@@ -112,7 +112,7 @@ units = {
 		force_equipment_variants = { Anti_Air_1 = { amount = 19 owner = FIN creator = SOV } }
 		force_equipment_variants = { medium_tank_flame_chassis_1 = { amount = 110 owner = FIN creator = SOV version_name = "BMP-2" } }
 		force_equipment_variants = { medium_tank_chassis_1 = { amount = 126 owner = FIN creator = POL version_name = "T-72M1" } }
-		force_equipment_variants = { medium_tank_artillery_chassis_0 = { amount = 18 owner = FIN creator = SOV version_name = "2S5 Giatsint-S" } }
+		force_equipment_variants = { medium_tank_artillery_chassis_1 = { amount = 18 owner = FIN creator = SOV version_name = "2S5 Giatsint-S" } }
 		force_equipment_variants = { medium_tank_aa_chassis_1 = { amount = 6 owner = FIN creator = FRA version_name = "Crotale" } }
 		force_equipment_variants = { medium_tank_rocket_chassis_1 = { amount = 18 owner = FIN creator = CZE version_name = "RM-70" } }
 	}
@@ -365,7 +365,7 @@ instant_effect = {
 
 	add_equipment_to_stockpile = {
 		type = medium_tank_chassis_0
-		variant_name = "T-55M"
+		variant_name = "T-55AM"
 		amount = 70
 		producer = SOV
 	}
@@ -458,7 +458,7 @@ instant_effect = {
 	}
 
 	add_equipment_to_stockpile = {
-		type = medium_tank_artillery_chassis_0
+		type = medium_tank_artillery_chassis_1
 		variant_name = "2S5 Giatsint-S"
 		amount = 0 #18 deployed
 		producer = SOV

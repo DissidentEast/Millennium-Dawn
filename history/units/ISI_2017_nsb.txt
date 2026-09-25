@@ -30,7 +30,7 @@ division_template = {
 	}
 
 	support = {
-		SP_arty_Battery = { x = 0 y = 0 }
+		SP_arty_battery = { x = 0 y = 0 }
 	}
 }
 
@@ -65,7 +65,7 @@ division_template = {
 	}
 
 	support = {
-		SP_arty_Battery = { x = 0 y = 0 }
+		SP_arty_battery = { x = 0 y = 0 }
 	}
 }
 
@@ -530,7 +530,7 @@ instant_effect = {
 
 	add_equipment_to_stockpile = {
 		type = medium_tank_chassis_0
-		variant_name = "T-55"
+		variant_name = "T-55A"
 		amount = 83
 		producer = SOV
 	}
@@ -563,7 +563,7 @@ instant_effect = {
 	}
 
 	add_equipment_to_stockpile = {
-		type = medium_tank_rocket_chassis_0
+		type = medium_tank_rocket_chassis_1
 		variant_name = "BM-27 Uragan"
 		amount = 6
 		producer = SOV
